@@ -1,0 +1,30 @@
+<html>
+  <head>
+    <title>SAME</title>
+    <script src="../popup/popup.js"></script>
+    <link rel="stylesheet" href="../popup/popup.css" type="text/css">
+  </head>
+  <body>
+    <div class="header"><img src="../img/logo.png"/></div>
+    <div id="status"></div>
+    <div id="timeRem"></div>
+    <div class="buttonContainer">
+      <div class="button" id="start">Start</div>
+      <!--<div class="button" id="finish">Save Capture</div>
+      <div class="button" id="cancel">Cancel Capture</div>
+      -->
+      <div class="button" id="stop">Stop</div>
+    </div>
+    <div class="notes">After capture is finished, a new tab will be opened automatically for you to
+name and save the file. Please do not close the tab before saving the file!</div>
+    <ul> Hotkeys:
+      <li id="startKey">Ctrl/Command + Shift +   to start capture on current tab</li>
+      <li id="endKey">Ctrl/Command + Shift + X to stop capture on current tab</li>
+    </ul>
+    <p class="extra">Hotkeys may not work if another extension is using the same hotkeys</p>
+    <p class="extra">Currently the max capture time is 20 minutes due to Chrome memory contraints</p>
+    <div class="links">
+      <p id="options">Options</p>
+    </div>
+  </body>
+</html>
