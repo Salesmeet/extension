@@ -1,11 +1,14 @@
+chrome.storage.local.set({'same_user':'facchini.corrado@gmail.com'}, function() {});
+
 /* SAME */
 chrome.runtime.onMessageExternal.addListener(
   function(request, sender, sendResponse) {
-      if (request=="startSame") {
+      if (request.operation=="startSame") {
           startCapture();
-      } else if (request=="stopSame") {
+      } else if (request.operation=="stopSame") {
+          // alert("bk - addListener: stopSame ");
           // stopSame();
-      } else if (request=="sameGetScreenshots") {
+      } else if (request.operation=="sameGetScreenshots") {
           startSameGetScreenshots();
       }
 
@@ -188,6 +191,7 @@ const audioCapture = (timeLimit, muteTab, format, quality, limitRemoved) => {
     let audioURL = null; //resulting object when encoding is completed
     chrome.tabs.query({active:true, currentWindow: true}, (tabs) => startTabId = tabs[0].id) //saves start tab
 
+    // alert("stream funzionante:" + stream);
     const liveStream = stream;
     const audioCtx = new AudioContext();
     const source = audioCtx.createMediaStreamSource(stream);
@@ -205,28 +209,40 @@ const audioCapture = (timeLimit, muteTab, format, quality, limitRemoved) => {
 
 
     function onStopCommand(command) { //keypress
+      // alert("bk - onStopCommand:" + command);
       if (command === "stop") {
         stopCapture();
       }
     }
 
     function onStopClick(request) { //click on popup
-      // alert("onStopClick");
-      if(request === "stopCapture") {
+      // alert("bk - onStopClick: " + request);
+      if(request.operation === "stopCapture") {
         stopCapture();
-      } else if (request === "cancelCapture") {
+      } else if (request.operation === "cancelCapture") {
         cancelCapture();
-      } else if (request.cancelEncodeID) {
-        if(request.cancelEncodeID === startTabId && mediaRecorder) {
+      } else if (request.operation.cancelEncodeID) {
+        if(request.operation.cancelEncodeID === startTabId && mediaRecorder) {
           mediaRecorder.cancelEncoding();
         }
       }
     }
 
+    var userSame = "";
+    var idmeetingSame = "";
+    var usertypeSame = "";
+    var idunivocoSame = "";
+
     function onStopClickSame(request) { //click on popup
-      if(request === "stopSame") {
+      userSame = request.user;
+      idmeetingSame = request.idmeeting;
+      usertypeSame = request.type;
+      idunivocoSame = request.idunivoco;
+
+      if(request.operation === "stopSame") {
+        // alert("bk - onStopClickSame"); // OK
         stopCapture();
-      } else if (request === "cancelSame") {
+      } else if (request.operation === "cancelSame") {
         cancelCapture();
       }
     }
@@ -236,11 +252,31 @@ const audioCapture = (timeLimit, muteTab, format, quality, limitRemoved) => {
     chrome.runtime.onMessageExternal.addListener(onStopClickSame);
 
     mediaRecorder.onComplete = (recorder, blob) => {
-      audioURL = window.URL.createObjectURL(blob);
-      if(completeTabID) {
-        chrome.tabs.sendMessage(completeTabID, {type: "encodingComplete", audioURL});
-      }
-      mediaRecorder = null;
+
+        //the form data that will hold the Blob to upload
+        const formData = new FormData();
+        //add the Blob to formData
+        formData.append('fileToUpload', blob, 'recording.mp3');
+        formData.append('idmeeting', idmeetingSame );
+        formData.append('type', usertypeSame );
+        formData.append('name', "" );
+        formData.append('idunivoco', idunivocoSame );
+        formData.append('user', userSame);
+        //send the request to the endpoint
+        var xhr = new XMLHttpRequest();
+        xhr.open('POST', "https://api.sameapp.net/public/v1/record/save", true);
+        xhr.onload = function () {
+            // alert("onload________" + this.status);
+        };
+        xhr.onreadystatechange = function() {
+            // alert("onreadystatechange________" + this.status);
+        };
+        try {
+          xhr.send(formData);
+        } catch (error) {
+          // alert("error________" + error);
+        }
+
     }
     mediaRecorder.onEncodingProgress = (recorder, progress) => {
       if(completeTabID) {
@@ -249,12 +285,14 @@ const audioCapture = (timeLimit, muteTab, format, quality, limitRemoved) => {
     }
 
     const stopCapture = function() {
+
       let endTabId;
       //check to make sure the current tab is the tab being captured
       chrome.tabs.query({active: true, currentWindow: true}, (tabs) => {
         endTabId = tabs[0].id;
         if(mediaRecorder && startTabId === endTabId){
           mediaRecorder.finishRecording();
+          /*
           chrome.tabs.create({url: "../complete/complete.html"}, (tab) => {
             completeTabID = tab.id;
             let completeCallback = () => {
@@ -262,15 +300,18 @@ const audioCapture = (timeLimit, muteTab, format, quality, limitRemoved) => {
             }
             setTimeout(completeCallback, 2000);
           });
-
+          */
           closeStream(endTabId);
-
         }
 
+
       })
+
+
     }
 
     const cancelCapture = function() {
+      // alert("bk - cancelCapture");
       let endTabId;
       chrome.tabs.query({active: true, currentWindow: true}, (tabs) => {
         endTabId = tabs[0].id;
@@ -282,6 +323,7 @@ const audioCapture = (timeLimit, muteTab, format, quality, limitRemoved) => {
       })
 
     }
+
 
 //removes the audio context and closes recorder to save memory
     const closeStream = function(endTabId) {
@@ -337,6 +379,7 @@ const deactiveSame = function() {
 /* SAME */
 
 const startCapture = function() {
+
   chrome.tabs.query({active: true, currentWindow: true}, (tabs) => {
     // CODE TO BLOCK CAPTURE ON YOUTUBE, DO NOT REMOVE
       if(!sessionStorage.getItem(tabs[0].id)) {
@@ -355,6 +398,7 @@ const startCapture = function() {
           audioCapture(time, options.muteTab, options.format, options.quality, options.limitRemoved);
         });
         chrome.runtime.sendMessage({captureStarted: tabs[0].id, startTime: Date.now()});
+
       }
     // }
   });
@@ -368,15 +412,4 @@ chrome.commands.onCommand.addListener((command) => {
   if (command === "deactiveSame") {
     deactiveSame();
   }
-});
-
-/*********************** Screenshots *************************/
-
-chrome.extension.onMessage.addListener(function(request, sender, sendResponse) {
-    if (request.name == 'screenshot') {
-        chrome.tabs.captureVisibleTab(null, null, function(dataUrl) {
-            sendResponse({ screenshotUrl: dataUrl });
-        });
-    }
-    return true;
 });

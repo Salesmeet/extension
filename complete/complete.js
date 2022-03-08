@@ -11,6 +11,8 @@ document.addEventListener('DOMContentLoaded', () => {
     if(request.type === "createTab") {
       format = request.format;
       let startID = request.startID;
+      console.log("createTab_______");
+      console.log(request);
       status.innerHTML = "Please wait..."
       closeButton.onclick = () => {
         chrome.runtime.sendMessage({cancelEncodeID: startID});
@@ -30,6 +32,8 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     //when encoding completes
     if(request.type === "encodingComplete" && encoding) {
+
+      console.log("encodingComplete______");
       encoding = false;
       status.innerHTML = "File is ready!";
       encodeProgress.style.width = '100%';
@@ -40,6 +44,7 @@ document.addEventListener('DOMContentLoaded', () => {
       encodeProgress.style.width = `${request.progress * 100}%`;
     }
     function generateSave(url) { //creates the save button
+
       const currentDate = new Date(Date.now()).toDateString();
       saveButton.onclick = () => {
         chrome.downloads.download({url: url, filename: `${currentDate}.${format}`, saveAs: true});
@@ -50,6 +55,5 @@ document.addEventListener('DOMContentLoaded', () => {
   review.onclick = () => {
     chrome.tabs.create({url: "https://chrome.google.com/webstore/detail/chrome-audio-capture/kfokdmfpdnokpmpbjhjbcabgligoelgp/reviews"});
   }
-
 
 })
