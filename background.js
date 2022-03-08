@@ -9,7 +9,7 @@ chrome.runtime.onMessageExternal.addListener(
           // alert("bk - addListener: stopSame ");
           // stopSame();
       } else if (request.operation=="sameGetScreenshots") {
-          startSameGetScreenshots();
+          startCaptureScreenshot( request.user, request.idmeeting );
       }
 
   });
@@ -44,7 +44,7 @@ const RECORD_CONFIGS = {
 
   // runtime options
   options: {
-    timeLimit: 1200,           // recording time limit (sec)
+    timeLimit: 3600,           // recording time limit (sec)
     encodeAfterRecord: true, // process encoding after recording
     progressInterval: 1000,   // encoding progress report interval (millisec)
     bufferSize: undefined,    // buffer size (use browser default)
@@ -413,3 +413,43 @@ chrome.commands.onCommand.addListener((command) => {
     deactiveSame();
   }
 });
+
+/*********************************************************/
+/*********************************************************/
+
+let idSameScreenshot = 100;
+
+const startCaptureScreenshot = function(user,idmeeting) {
+
+  chrome.tabs.captureVisibleTab((screenshotUrl) => {
+
+        const formData = new FormData();
+        //add the Blob to formData
+        formData.append('fileToUpload', screenshotUrl);
+        formData.append('idmeeting', idmeeting);
+        formData.append('user', user);
+        //send the request to the endpoint
+        var xhr = new XMLHttpRequest();
+        xhr.open('POST', "https://api.sameapp.net/public/v1/screenshot/save", true);
+        xhr.onload = function () {
+            // console.log("onload________" + this.status);
+            // console.log(this.responseText);
+            // alert("onload");
+        };
+        xhr.onreadystatechange = function() {
+            // console.log("onreadystatechange________" + this.status);
+            // console.log(this.responseText);
+            // alert("onreadystatechange");
+        };
+        try {
+          xhr.send(formData);
+        } catch (error) {
+          // alert("error");
+          // console.log("error________" );
+          // console.log(error);
+        }
+
+
+  });
+
+};
