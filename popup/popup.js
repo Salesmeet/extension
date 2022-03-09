@@ -153,14 +153,18 @@ document.addEventListener('DOMContentLoaded', function() {
     chrome.storage.local.set({'same_active_service':'no'}, function() {});
   };
   chrome.runtime.getPlatformInfo((info) => {
-    if(info.os === "mac") {
+    if(info.os === "mac") {      
+      /*
       startKey.innerHTML = "Command + Shift + U to start capture on current tab";
       endKey.innerHTML = "Command + Shift + X to stop capture on current tab";
+      */
     } else {
+      /*
       startKey.innerHTML = "Ctrl + Shift + S to start capture on current tab";
       endKey.innerHTML = "Ctrl + Shift + X to stop capture on current tab";
+      */
     }
   })
   const options = document.getElementById("options");
-  options.onclick = () => {chrome.runtime.openOptionsPage()};
+  // options.onclick = () => {chrome.runtime.openOptionsPage()};
 });
