@@ -9,7 +9,7 @@ chrome.runtime.onMessageExternal.addListener(
           // alert("bk - addListener: stopSame ");
           // stopSame();
       } else if (request.operation=="sameGetScreenshots") {
-          startCaptureScreenshot( request.user, request.idmeeting );
+          startCaptureScreenshot( request.user, request.idmeeting, request.value );
       }
 
   });
@@ -367,15 +367,19 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
 
 /* SAME */
 const activeSame = function() {
-  chrome.tabs.query({active: true, currentWindow: true}, (tabs) => {
-    chrome.tabs.sendMessage(tabs[0].id,{type: "sameActive"});
-  });
+  sendMessageSame( "sameActive");
 };
 const deactiveSame = function() {
+  sendMessageSame( "sameDeactive");
+};
+
+const sendMessageSame = function( msg ) {
   chrome.tabs.query({active: true, currentWindow: true}, (tabs) => {
-    chrome.tabs.sendMessage(tabs[0].id,{type: "sameDeactive"});
+    chrome.tabs.sendMessage(tabs[0].id,{type: msg});
   });
 };
+
+
 /* SAME */
 
 const startCapture = function() {
@@ -419,7 +423,7 @@ chrome.commands.onCommand.addListener((command) => {
 
 let idSameScreenshot = 100;
 
-const startCaptureScreenshot = function(user,idmeeting) {
+const startCaptureScreenshot = function(user,idmeeting,value) {
 
   chrome.tabs.captureVisibleTab((screenshotUrl) => {
 
@@ -428,6 +432,7 @@ const startCaptureScreenshot = function(user,idmeeting) {
         formData.append('fileToUpload', screenshotUrl);
         formData.append('idmeeting', idmeeting);
         formData.append('user', user);
+        formData.append('value', value);
         //send the request to the endpoint
         var xhr = new XMLHttpRequest();
         xhr.open('POST', "https://api.sameapp.net/public/v1/screenshot/save", true);
@@ -448,6 +453,8 @@ const startCaptureScreenshot = function(user,idmeeting) {
           // console.log("error________" );
           // console.log(error);
         }
+
+        sendMessageSame("sameActivePanelScreenshot");
 
 
   });

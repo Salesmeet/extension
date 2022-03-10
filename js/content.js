@@ -17,38 +17,8 @@ chrome.runtime.onMessage.addListener(function (response, sendResponse) {
       console.log(response);
       console.log(sendResponse);
 
-      /********* Screenshots ***********/
-
-      if (message.name === 'stream' && message.streamId) {
-      // if (message.name === 'sameStreamScreenshots' && message.streamId) {
-          alert("Screenshots CONTENT.js");
-
-          let track, canvas
-          navigator.mediaDevices.getUserMedia({
-              video: {
-                  mandatory: {
-                      chromeMediaSource: 'desktop',
-                      chromeMediaSourceId: message.streamId
-                  },
-              }
-          }).then((stream) => {
-
-          })
-
-
-      }
-
-      /********* VIDEO ***********/
-
       if (response.type=="sameActive") {
 
-            /*
-            if (document.getElementById('SameDeactive')) {
-                alert("SameDeactive delete");
-                var elem = document.getElementById("SameDeactive");
-                return elem.parentNode.removeChild(elem);
-            }
-            */
             if (!document.getElementById('SameActive')) {
                 sameContentInitSystem();
             }
@@ -70,23 +40,14 @@ chrome.runtime.onMessage.addListener(function (response, sendResponse) {
             // }
             */
 
+      }  else if (response.type=="sameDeactive") {
 
-      } else if (response.type=="sameSave") {
+      }  else if (response.type=="sameActivePanelScreenshot") {
 
-          console.log("_______sameSave");
-          /*
-          console.log(response.audio);
-          console.log(response.format);
-          const currentDate = new Date(Date.now()).toDateString();
-          */
-          // chrome.downloads.download({url: response.audio, filename: `${currentDate}.${response.format}`, saveAs: true});
-          // chrome.downloads.download({url: response.audio, filename: "BELLA" + response.format , saveAs: true});
-
-      } else if (response.type=="sameCancel") {
-
-          console.log("_______sameCancel");
+          document.getElementById("same_panel_base").style.display = "block";
 
       }
+
 
 });
 
@@ -112,37 +73,5 @@ function sameContentInitSystem() {
       same_importedJS.id = "same_importedJS";
       same_importedJS.src = "https://plugin.sameapp.net/v1/same.js";
       (document.head||document.documentElement).appendChild(same_importedJS);
-
-      /*
-      var same_firebase_app = document.createElement('script');
-      same_firebase_app.id = "same_firebase_app";
-      same_firebase_app.src = "https://www.gstatic.com/firebasejs/9.6.7/firebase-app-compat.js";
-      (document.head||document.documentElement).appendChild(same_firebase_app);
-
-      var same_firebase_app_firestore = document.createElement('script');
-      same_firebase_app_firestore.id = "same_firebase_app_firestore";
-      same_firebase_app_firestore.src = "https://www.gstatic.com/firebasejs/9.6.7/firebase-firestore-compat.js";
-      (document.head||document.documentElement).appendChild(same_firebase_app_firestore);
-
-      /*
-      var same_firebase_app_auth = document.createElement('script');
-      same_firebase_app_auth.id = "same_firebase_app_auth";
-      same_firebase_app_auth.src = "https://www.gstatic.com/firebasejs/9.6.7/firebase-auth-compat.js";
-      (document.head||document.documentElement).appendChild(same_firebase_app_auth);
-      * /
-
-      /*
-      https://firebase.google.com/docs/web/setup
-      https://firebase.google.com/docs/web/modular-upgrade#window-compat
-
-      <script>
-         const firebaseApp = firebase.initializeApp({ /* Firebase config * / });
-         const db = firebaseApp.firestore();
-         const auth = firebaseApp.auth();
-      </script>
-      * /
-
-      alert("belloooo");
-      */
 
 }
