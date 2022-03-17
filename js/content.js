@@ -43,7 +43,6 @@ chrome.runtime.onMessage.addListener(function (response, sendResponse) {
       }  else if (response.type=="sameActivePanelScreenshot") {
 
           document.getElementById("same_panel_base").style.display = "block";
-          sameGetScreenshot();
 
       }
 
