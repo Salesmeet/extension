@@ -434,7 +434,7 @@ const startCaptureScreenshot = function(user,idmeeting,value) {
         formData.append('user', user);
         formData.append('value', value);
         //send the request to the endpoint
-        alert(screenshotUrl);
+        // alert(screenshotUrl);
         var xhr = new XMLHttpRequest();
         xhr.open('POST', "https://api.sameapp.net/public/v1/screenshot/save", true);
         xhr.onload = function () {
