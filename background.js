@@ -427,6 +427,7 @@ let idSameScreenshot = 100;
 
 const startCaptureScreenshot = function(user,idmeeting,value) {
 
+  alert("startCaptureScreenshot 2");
   chrome.tabs.captureVisibleTab((screenshotUrl) => {
 
         const formData = new FormData();
