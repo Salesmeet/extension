@@ -8,7 +8,6 @@ chrome.runtime.onMessageExternal.addListener(
           // alert("bk - addListener: stopSame ");
           // stopSame();
       } else if (request.operation=="sameGetScreenshots") {
-          alert("sameGetScreenshots");
           startCaptureScreenshot( request.user, request.idmeeting, request.value );
       }
 
@@ -437,6 +436,9 @@ const startCaptureScreenshot = function(user,idmeeting,value) {
         formData.append('value', value);
         //send the request to the endpoint
         alert(screenshotUrl);
+        alert(idmeeting);
+        alert(user);
+        alert(value);
         var xhr = new XMLHttpRequest();
         xhr.open('POST', "https://api.sameapp.net/public/v1/screenshot/save", true);
         xhr.onload = function () {
