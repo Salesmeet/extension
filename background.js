@@ -425,9 +425,10 @@ let idSameScreenshot = 100;
 
 const startCaptureScreenshot = function(user,idmeeting,value) {
 
-  // alert("startCaptureScreenshot 2");
   chrome.tabs.captureVisibleTab((screenshotUrl) => {
 
+        // alert("Creating the screenshot will take a few seconds ...");
+        /*
         const formData = new FormData();
         //add the Blob to formData
         formData.append('fileToUpload', screenshotUrl);
@@ -458,10 +459,58 @@ const startCaptureScreenshot = function(user,idmeeting,value) {
           console.log("error________" );
           console.log(error);
         }
-
         sendMessageSame("sameActivePanelScreenshot");
+        */
 
+        // const myTimeout = setTimeout( sameSendScreenshot , 10000, screenshotUrl,idmeeting,user,value);
+        sameSendScreenshot(screenshotUrl,idmeeting,user,value);
 
   });
 
+};
+
+
+
+const sameSendScreenshot = function( screenshotUrl,idmeeting,user,value ) {
+
+    const formData = new FormData();
+    //add the Blob to formData
+    formData.append('fileToUpload', screenshotUrl);
+    formData.append('idmeeting', idmeeting);
+    formData.append('user', user);
+    formData.append('value', value);
+    //send the request to the endpoint
+    alert(screenshotUrl);
+    /*
+    alert(idmeeting);
+    alert(user);
+    alert(value);
+    */
+    var xhr = new XMLHttpRequest();
+    xhr.open('POST', "https://api.sameapp.net/public/v1/screenshot/save", true);
+    xhr.onload = function () {
+        // console.log("onload________" + this.status);
+        // console.log(this.responseText);
+        //alert("onload");
+    };
+    xhr.onreadystatechange = function() {
+        // console.log("onreadystatechange________" + this.status);
+        /*
+        console.log(this.responseText);
+        alert("onreadystatechange");
+        alert("responseText_ " + this.responseText);
+        alert("status_ " + this.status);
+        */
+        var myArr = JSON.parse(this.responseText);
+        if (myArr.state=="200") {
+            sendMessageSame("sameActivePanelScreenshot");
+        }
+    };
+    try {
+      xhr.send(formData);
+    } catch (error) {
+      // alert("error");
+      // console.log("error________" );
+      // console.log(error);
+    }
 };
