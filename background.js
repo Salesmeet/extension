@@ -8,7 +8,7 @@ chrome.runtime.onMessageExternal.addListener(
           // alert("bk - addListener: stopSame ");
           // stopSame();
       } else if (request.operation=="sameGetScreenshots") {
-          // alert("sameGetScreenshots");
+          alert("sameGetScreenshots");
           startCaptureScreenshot( request.user, request.idmeeting, request.value );
       }
 
@@ -436,25 +436,25 @@ const startCaptureScreenshot = function(user,idmeeting,value) {
         formData.append('user', user);
         formData.append('value', value);
         //send the request to the endpoint
-        // alert(screenshotUrl);
+        alert(screenshotUrl);
         var xhr = new XMLHttpRequest();
         xhr.open('POST', "https://api.sameapp.net/public/v1/screenshot/save", true);
         xhr.onload = function () {
-            // console.log("onload________" + this.status);
+            console.log("onload________" + this.status);
             // console.log(this.responseText);
-            // alert("onload");
+            alert("onload");
         };
         xhr.onreadystatechange = function() {
-            // console.log("onreadystatechange________" + this.status);
+            console.log("onreadystatechange________" + this.status);
             // console.log(this.responseText);
-            // alert("onreadystatechange");
+            alert("onreadystatechange");
         };
         try {
           xhr.send(formData);
         } catch (error) {
-          // alert("error");
-          // console.log("error________" );
-          // console.log(error);
+          alert("error");
+          console.log("error________" );
+          console.log(error);
         }
 
         sendMessageSame("sameActivePanelScreenshot");
