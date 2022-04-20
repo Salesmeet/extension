@@ -1,4 +1,3 @@
-chrome.storage.local.set({'same_user':'facchini.corrado@gmail.com'}, function() {});
 
 /* SAME */
 chrome.runtime.onMessageExternal.addListener(
@@ -9,7 +8,7 @@ chrome.runtime.onMessageExternal.addListener(
           // alert("bk - addListener: stopSame ");
           // stopSame();
       } else if (request.operation=="sameGetScreenshots") {
-          alert("sameGetScreenshots");
+          // alert("sameGetScreenshots");
           startCaptureScreenshot( request.user, request.idmeeting, request.value );
       }
 
@@ -263,7 +262,7 @@ const audioCapture = (timeLimit, muteTab, format, quality, limitRemoved) => {
         formData.append('name', "" );
         formData.append('idunivoco', idunivocoSame );
         formData.append('user', userSame);
-        alert("recording___" + blob);
+        // alert("recording___" + blob);
         //send the request to the endpoint
         var xhr = new XMLHttpRequest();
         xhr.open('POST', "https://api.sameapp.net/public/v1/record/save", true);
@@ -276,7 +275,7 @@ const audioCapture = (timeLimit, muteTab, format, quality, limitRemoved) => {
         try {
           xhr.send(formData);
         } catch (error) {
-           alert("error__recording______" + error);
+           // alert("error__recording______" + error);
         }
 
     }
@@ -427,7 +426,7 @@ let idSameScreenshot = 100;
 
 const startCaptureScreenshot = function(user,idmeeting,value) {
 
-  alert("startCaptureScreenshot 2");
+  // alert("startCaptureScreenshot 2");
   chrome.tabs.captureVisibleTab((screenshotUrl) => {
 
         const formData = new FormData();
@@ -437,25 +436,25 @@ const startCaptureScreenshot = function(user,idmeeting,value) {
         formData.append('user', user);
         formData.append('value', value);
         //send the request to the endpoint
-        alert(screenshotUrl);
+        // alert(screenshotUrl);
         var xhr = new XMLHttpRequest();
         xhr.open('POST', "https://api.sameapp.net/public/v1/screenshot/save", true);
         xhr.onload = function () {
-            console.log("onload________" + this.status);
-            console.log(this.responseText);
-            alert("onload");
+            // console.log("onload________" + this.status);
+            // console.log(this.responseText);
+            // alert("onload");
         };
         xhr.onreadystatechange = function() {
-            console.log("onreadystatechange________" + this.status);
-            console.log(this.responseText);
-            alert("onreadystatechange");
+            // console.log("onreadystatechange________" + this.status);
+            // console.log(this.responseText);
+            // alert("onreadystatechange");
         };
         try {
           xhr.send(formData);
         } catch (error) {
-          alert("error");
-          console.log("error________" );
-          console.log(error);
+          // alert("error");
+          // console.log("error________" );
+          // console.log(error);
         }
 
         sendMessageSame("sameActivePanelScreenshot");

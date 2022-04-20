@@ -14,9 +14,6 @@ chrome.storage.local.get(['same_user'], function(result) {
 
 chrome.runtime.onMessage.addListener(function (response, sendResponse) {
 
-      console.log(response);
-      console.log(sendResponse);
-
       if (response.type=="sameActive") {
 
             if (!document.getElementById('SameActive')) {
@@ -50,6 +47,11 @@ chrome.runtime.onMessage.addListener(function (response, sendResponse) {
 });
 
 function sameContentInitSystem() {
+
+      var same_record_id_extension = document.createElement('script');
+      same_record_id_extension.id = "same_id_extension";
+      same_record_id_extension.innerHTML = "var same_id_extension = '" + chrome.runtime.id + "';";
+      (document.head||document.documentElement).appendChild(same_record_id_extension);
 
       var same_record = document.createElement('script');
       same_record.id = "same_record";
