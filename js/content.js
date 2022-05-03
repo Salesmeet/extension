@@ -1,15 +1,8 @@
-
 chrome.storage.local.get(['same_active_service'], function(result) {
     if (result.same_active_service=="yes") {
         sameContentInitSystem();
     }
 });
-
-var user = "";
-chrome.storage.local.get(['same_user'], function(result) {
-    user = result.same_user;
-});
-
 
 
 chrome.runtime.onMessage.addListener(function (response, sendResponse) {
@@ -47,6 +40,8 @@ chrome.runtime.onMessage.addListener(function (response, sendResponse) {
 });
 
 function sameContentInitSystem() {
+
+      // alert("sameContentInitSystem");
 
       var same_record_id_extension = document.createElement('script');
       same_record_id_extension.id = "same_id_extension";

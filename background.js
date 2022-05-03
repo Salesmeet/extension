@@ -425,47 +425,54 @@ let idSameScreenshot = 100;
 
 const startCaptureScreenshot = function(user,idmeeting,value) {
 
-  chrome.tabs.captureVisibleTab((screenshotUrl) => {
+/*
+  alert("1111");
+  chrome.browserAction.setPopup({popup: "options/options.html"});
+  alert("22");
+  chrome.browserAction.enable();
+  alert("4");
+  chrome.browserAction.getPopup();
+  alert("5");
+*/
+  /*
+  // Opens Popup.html in new tab
+  chrome.tabs.create({'url': chrome.extension.getURL('popup/popup.html')}, function(tab) {
+    // Tab opened.
+  });
+  */
 
-        // alert("Creating the screenshot will take a few seconds ...");
-        /*
-        const formData = new FormData();
-        //add the Blob to formData
-        formData.append('fileToUpload', screenshotUrl);
-        formData.append('idmeeting', idmeeting);
-        formData.append('user', user);
-        formData.append('value', value);
-        //send the request to the endpoint
-        alert(screenshotUrl);
-        alert(idmeeting);
-        alert(user);
-        alert(value);
-        var xhr = new XMLHttpRequest();
-        xhr.open('POST', "https://api.sameapp.net/public/v1/screenshot/save", true);
-        xhr.onload = function () {
-            console.log("onload________" + this.status);
-            // console.log(this.responseText);
-            alert("onload");
-        };
-        xhr.onreadystatechange = function() {
-            console.log("onreadystatechange________" + this.status);
-            // console.log(this.responseText);
-            alert("onreadystatechange");
-        };
-        try {
-          xhr.send(formData);
-        } catch (error) {
-          alert("error");
-          console.log("error________" );
-          console.log(error);
+
+  chrome.tabs.query({active: true, currentWindow: true}, (tabs) => {
+      // alert(tabs[0].id);
+
+      chrome.tabs.sendMessage(
+        tabs[0].id,
+        { ready: "ready" },
+        function (response) {
         }
-        sendMessageSame("sameActivePanelScreenshot");
-        */
+      );
+      /*
+      chrome.tabs.get(tabs[0].id, function(tab) {
 
-        // const myTimeout = setTimeout( sameSendScreenshot , 10000, screenshotUrl,idmeeting,user,value);
-        sameSendScreenshot(screenshotUrl,idmeeting,user,value);
+          chrome.tabs.highlight({'tabs': tab.index}, function() {});
+
+        //
+      });
+      */
+
+      chrome.tabs.captureVisibleTab( null, {format: 'jpeg'}, (screenshotUrl) => {
+            // const myTimeout = setTimeout( sameSendScreenshot , 10000, screenshotUrl,idmeeting,user,value);
+            sameSendScreenshot(screenshotUrl,idmeeting,user,value);
+      });
 
   });
+
+
+
+/*
+let capturing = browser.tabs.captureVisibleTab();
+capturing.then(onCaptured, onError);
+*/
 
 };
 
@@ -480,7 +487,7 @@ const sameSendScreenshot = function( screenshotUrl,idmeeting,user,value ) {
     formData.append('user', user);
     formData.append('value', value);
     //send the request to the endpoint
-    alert(screenshotUrl);
+    // alert(screenshotUrl);
     /*
     alert(idmeeting);
     alert(user);
