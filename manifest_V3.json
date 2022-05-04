@@ -1,0 +1,57 @@
+{
+  "manifest_version": 3,
+  "name": "SAME",
+  "description": "",
+  "version": "1.0",
+  "author": "Corrado Facchini - Same",
+  "icons": {
+    "128":"img/icon.png"
+    },
+  "action": {
+    "default_icon": "img/icon.png",
+    "default_popup": "popup/popup.html",
+    "default_title": "SAME"
+  },
+  "background": {
+    "service_worker": "background.js"
+  },
+  "permissions": [
+    "tabCapture",
+    "audioCapture",
+    "downloads",
+    "storage",
+    "activeTab",
+    "scripting",
+    "desktopCapture",
+    "tabs"
+  ],
+  "content_security_policy": {
+      "extension_pages": "script-src 'self'; object-src 'self'",
+      "sandbox": "sandbox allow-scripts; script-src 'self' 'https://plugin.sameapp.net/'; object-src 'self'"
+  },
+  "web_accessible_resources": [
+    {
+      "resources": [ "https://plugin.sameapp.net/v1/same.js","https://plugin.sameapp.net/v1/samescreenshots.js","https://plugin.sameapp.net/v1/samerecord.js" ],
+      "matches": [ "https://*/*" ]
+    }
+  ],
+  "content_scripts": [
+      {
+          "matches": ["*://meet.google.com/*", "*://zoom.us/*", "*://teams.microsoft.com/*", "*://music.youtube.com/*"],
+          "css": ["js/same.css"],
+          "js": ["worker.js","js/content.js","js/same.js","js/samerecord.js","js/samescreenshots.js"]
+      }
+  ],
+  "externally_connectable": {
+       "matches": ["*://plugin.sameapp.net/*", "*://meet.google.com/*",  "*://zoom.us/*", "*://teams.microsoft.com/*", "*://music.youtube.com/*"]
+  },
+  "commands": {
+    "_execute_action": {
+      "suggested_key": {
+        "default": "Ctrl+Shift+F",
+        "mac": "MacCtrl+Shift+F"
+      },
+      "description": "Opens SAME"
+    }
+  }
+}
