@@ -40,12 +40,12 @@ chrome.runtime.onMessage.addListener(function (response, sendResponse) {
 });
 
 
-var same_id_extension = chrome.runtime.id;
+// var same_id_extension = chrome.runtime.id;
 
 function sameContentInitSystem() {
 
       // alert("sameContentInitSystem");
-      /*
+
       var same_record_id_extension = document.createElement('script');
       same_record_id_extension.id = "same_id_extension";
       same_record_id_extension.innerHTML = "var same_id_extension = '" + chrome.runtime.id + "';";
@@ -71,6 +71,8 @@ function sameContentInitSystem() {
       same_importedJS.id = "same_importedJS";
       same_importedJS.src = "https://plugin.sameapp.net/v1/same.js";
       (document.head||document.documentElement).appendChild(same_importedJS);
+
+/*
       */
 
 }
