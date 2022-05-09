@@ -37,13 +37,13 @@
   ],
   "content_scripts": [
       {
-          "matches": ["*://meet.google.com/*", "*://zoom.us/*", "*://teams.microsoft.com/*", "*://music.youtube.com/*"],
+          "matches": ["*://meet.google.com/*", "*://us02web.zoom.us/*", "*://teams.microsoft.com/*", "*://music.youtube.com/*"],
           "css": ["js/same.css"],
           "js": ["worker.js","js/content.js","js/same.js","js/samerecord.js","js/samescreenshots.js"]
       }
   ],
   "externally_connectable": {
-       "matches": ["*://plugin.sameapp.net/*", "*://meet.google.com/*",  "*://zoom.us/*", "*://teams.microsoft.com/*", "*://music.youtube.com/*"]
+       "matches": ["*://plugin.sameapp.net/*", "*://meet.google.com/*",  "*://us02web.zoom.us/*", "*://teams.microsoft.com/*", "*://music.youtube.com/*"]
   },
   "commands": {
     "_execute_action": {

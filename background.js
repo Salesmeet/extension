@@ -2,6 +2,8 @@
 /* SAME */
 chrome.runtime.onMessageExternal.addListener(
   function(request, sender, sendResponse) {
+      // alert("addListener");
+      // alert(request.operation);
       if (request.operation=="startSame") {
           startCapture();
       } else if (request.operation=="stopSame") {
@@ -10,7 +12,6 @@ chrome.runtime.onMessageExternal.addListener(
       } else if (request.operation=="sameGetScreenshots") {
           startCaptureScreenshot( request.user, request.idmeeting, request.value );
       }
-
   });
 /* SAME */
 
@@ -421,10 +422,12 @@ chrome.commands.onCommand.addListener((command) => {
 /*********************************************************/
 /*********************************************************/
 
+
 let idSameScreenshot = 100;
 
 const startCaptureScreenshot = function(user,idmeeting,value) {
 
+  // alert("1111");
 /*
   alert("1111");
   chrome.browserAction.setPopup({popup: "options/options.html"});
@@ -480,6 +483,7 @@ capturing.then(onCaptured, onError);
 
 const sameSendScreenshot = function( screenshotUrl,idmeeting,user,value ) {
 
+    // alert("sameSendScreenshotsss");
     const formData = new FormData();
     //add the Blob to formData
     formData.append('fileToUpload', screenshotUrl);

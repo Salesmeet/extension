@@ -34,17 +34,25 @@ chrome.runtime.onMessage.addListener(function (response, sendResponse) {
 
           document.getElementById("same_panel_base").style.display = "block";
 
+          // Per il momento ho trovato solo questo metodo per chiamare la funzione.
+          var same_call_function = document.createElement('script');
+          same_call_function.innerHTML = "sameGetScreenshot();";
+          (document.head||document.documentElement).appendChild(same_call_function);
+
       }
 
 
 });
 
-
+// V3
 // var same_id_extension = chrome.runtime.id;
 
 function sameContentInitSystem() {
 
       // alert("sameContentInitSystem");
+
+      // V2
+
 
       var same_record_id_extension = document.createElement('script');
       same_record_id_extension.id = "same_id_extension";
@@ -71,7 +79,6 @@ function sameContentInitSystem() {
       same_importedJS.id = "same_importedJS";
       same_importedJS.src = "https://plugin.sameapp.net/v1/same.js";
       (document.head||document.documentElement).appendChild(same_importedJS);
-
 /*
       */
 

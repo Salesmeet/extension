@@ -8,8 +8,15 @@ function initScreenshotsSameExension() {
   let screenshotValue = prompt('Enter a name for your screenshot?','');
   if (screenshotValue != null) {
 
+      alert("initScreenshotsSameExension");
+
       sameDeActiveScreenshot();
       const options = {operation:"sameGetScreenshots", user:sameGetUser(), idmeeting:sameGetIdMeeting(), value:screenshotValue };
+
+      alert(options);
+      alert(same_id_extension);
+
+      // v2
       chrome.runtime.sendMessage( same_id_extension , options );
 
   }
